@@ -1,74 +1,54 @@
-<!DOCTYPE html>
 <html>
+<head>
+<title>mamikk's tetris.c ported to WebGL</title>
+<style>
+body {
+    background : White;
+    text-align: center;
+    color : Black;
+}
+</style>
+</head>
 
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Tetris : " />
+<body onload="start();" onkeydown="game.keydown(event); return false;" onkeyup="game.keyup(event); return false;">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+<a href="http://github.com/kvisle/"><img style="position: absolute; top: 0; left: 149px; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/7afbc8b248c68eb468279e8c17986ad46549fb71/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub"></a>
 
-    <title>Tetris</title>
-  </head>
+<h1><a href="https://github.com/mamikk/tetris/blob/master/tetris.c">mamikk's tetris.c</a> ported to WebGL</h1>
+<canvas id="gl" style="border : 1px solid Black;" width="800" height="600"></canvas>
 
-  <body>
+</body>
+<!-- My code -->
+<script src="tetris.js"></script>
+<script src="gl.js"></script>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/kvisle/tetris">View on GitHub</a>
+<!-- Libraries -->
+<script src="lib/gl-matrix.js"></script>
+<script src="lib/String.js"></script>
 
-          <h1 id="project_title">Tetris</h1>
-          <h2 id="project_tagline"></h2>
+<!-- Shaders -->
+<script id="shader-fs" type="x-shader/x-fragment">
+precision mediump float;
+varying vec3 vColor;
+uniform vec3 uColor;
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/kvisle/tetris/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/kvisle/tetris/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
+void main(void) {
+  gl_FragColor = vec4((vColor*uColor), 1.0);
+}
+</script>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>Welcome to GitHub Pages.</h3>
+<script id="shader-vs" type="x-shader/x-vertex">
+attribute vec3 aVertexPosition;
+attribute vec3 aColor;
+varying vec3 vColor;
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+uniform mat4 uMVMatrix;
+uniform mat4 uPMatrix;
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+void main(void) {
+  vColor = aColor;
+  gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+}
+</script>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Tetris maintained by <a href="https://github.com/kvisle">kvisle</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
-  </body>
 </html>
